@@ -91,7 +91,7 @@ class Graph:
                 target.write("\n")
 
         target.close()
-        return G 
+        return G
 
 
     def add_node(self,i):
@@ -159,10 +159,10 @@ class Graph:
 
 
 #==============================================================================
-# We start with two simple node and generate a graph. Each step we randomly 
-# select a node that would be expanded. So a node $u$ will spawn of another 
-# node say $v$. Now in this way we will go on adding edges. The following 
-# function has the following functionality 
+# We start with two simple node and generate a graph. Each step we randomly
+# select a node that would be expanded. So a node $u$ will spawn of another
+# node say $v$. Now in this way we will go on adding edges. The following
+# function has the following functionality
 # Input: number of nodes, number of edges, q_{mod} and q_{con}
 # Output: a graph G, during the process generated phylogeny tree
 #==============================================================================
@@ -172,14 +172,14 @@ def forward_dmc(nodes,edges,outfile,qmod,qcon,treefile):
     G = Graph("")
     target = open(outfile,'w')
     anchor_node_dic = {}
-    
+
 
     new_nodes = set(range(1,nodes+1))
-    
-    
+
+
     # Add two nodes in the graph
-    # They can have an edge according to 
-    # q_con probabbility 
+    # They can have an edge according to
+    # q_con probabbility
     print len(new_nodes)
 
 
@@ -187,51 +187,51 @@ def forward_dmc(nodes,edges,outfile,qmod,qcon,treefile):
         print 'in loop'
         u = random.randint(1,nodes+1)
         v = random.randint(1,nodes+1)
-        if not G.has_node(u): 
+        if not G.has_node(u):
             G.add_node(u)
             new_nodes.remove(u)
-        if not G.has_node(v): 
+        if not G.has_node(v):
             G.add_node(v)
             new_nodes.remove(v)
         if u != v:
             if random.random() < qcon:
                 G.add_edge(u,v)
                 # Create newick tree
-                string_root = "(" + "Taxon" + str(u) + ":" + str(1) + "," + "Taxon" + str(v) + ":" + str(1) + ")"
-                tree = dendropy.Tree(stream=StringIO.StringIO(string_root),schema="newick")
+                string_root = "(" + "Taxon" + str(u) + ":" + str(1) + "," + "Taxon" + str(v) + ":" + str(1) + ")" + ";"
+                tree = dendropy.Tree.get(data=string_root,schema="newick")
             break
 
     print len(new_nodes)
-    
+
 
     while len(new_nodes) > 0:
         # Chooding anchor node
         new_parent = G.random_node()
         #print new_parent
 
-        # Create new node 
+        # Create new node
         child_node = random.sample(new_nodes,1)
         child_node = child_node[0]
         G.add_node(child_node)
         anchor_node_dic[child_node] = new_parent
         new_nodes.remove(child_node)
-        # Create newick tree 
-        string_temp = "(" + "Taxon" + str(new_parent) + ":" + str(0.1) + "," + "Taxon" + str(child_node) + ":" + str(0.1) + ")"
-        temp_tree = dendropy.Tree(stream=StringIO.StringIO(string_temp),schema="newick")
+        # Create newick tree
+        string_temp = "(" + "Taxon" + str(new_parent) + ":" + str(0.1) + "," + "Taxon" + str(child_node) + ":" + str(0.1) + ")" + ";"
+        temp_tree = dendropy.Tree.get(data=string_temp,schema="newick")
         current_parent = filter(lambda x: x.taxon.label == "Taxon" + str(new_parent), [y for y in tree.leaf_nodes()])
         temp_tree_nodes = [x for x in temp_tree.nodes()]
         current_parent[0].add_child(temp_tree_nodes[1])
         current_parent[0].add_child(temp_tree_nodes[2])
-        current_parent[0].taxon.label = current_parent[0].oid
+        current_parent[0].taxon.label = current_parent[0].oid  # used to be .oid at the end of current_parent[0]. Removing oid causes a maximum recursion depth error
 
 
-        # Add nodes according to q_mod 
-        # 
+        # Add nodes according to q_mod
+        #
         for x in G.neighbors(new_parent):
             G.add_edge(x,child_node)
 
 
-        # shallow copy of neighbors 
+        # shallow copy of neighbors
         adjacent_nodes = copy.copy(G.neighbors(child_node))
 
         for x in adjacent_nodes:
@@ -265,7 +265,7 @@ def forward_dmc(nodes,edges,outfile,qmod,qcon,treefile):
 
     for u in G:
         if not u in con_nodes:
-            G.add_edge(u,anchor_node_dic[u]) 
+            G.add_edge(u,anchor_node_dic[u])
             line = str(u) + "\t" + str(anchor_node_dic[u])
             target.write(line)
             target.write("\n")
@@ -273,7 +273,7 @@ def forward_dmc(nodes,edges,outfile,qmod,qcon,treefile):
 
 
     target.close()
-    
+
 
     out = tree.as_string('newick')
     out =  out.replace('[&U]','[50]') ## 50 unit long sequences
@@ -285,12 +285,12 @@ def forward_dmc(nodes,edges,outfile,qmod,qcon,treefile):
     return G
 
 #==============================================================================
-# This function creates a tree made in reverse direction. In each step 
+# This function creates a tree made in reverse direction. In each step
 # it merges two nodes that has maximum likelihood to be emerged from the
-# same 
-# In this version of framework we introduce a sampling while merging 
-# that is we would merge two nodes with probability proportional to 
-# their likelihood. 
+# same
+# In this version of framework we introduce a sampling while merging
+# that is we would merge two nodes with probability proportional to
+# their likelihood.
 #==============================================================================
 
 def dmc_delorean(G,qmod,qcon):
@@ -299,7 +299,7 @@ def dmc_delorean(G,qmod,qcon):
     # Make initial pairwise likelihoods.
     #target = open(hisfile,'w')
 
-    global H 
+    global H
     L = {}
     for u in G: L[u] = {}
 
@@ -311,7 +311,7 @@ def dmc_delorean(G,qmod,qcon):
         print '\n'
     level_counter = 0
 
-    while (G.num_nodes >= 2): 
+    while (G.num_nodes >= 2):
     	# at least two nodes in the graph.
 		# Get largest Luv.
         L_list = []
@@ -328,13 +328,13 @@ def dmc_delorean(G,qmod,qcon):
 
         L_norm = {}
     	for u in G: L_norm[u] = {}
-		        		
+
     	for u in G:
         	for v in G:
         		if u >= v: continue
         		L_norm[u][v] = L[u][v] / norm_sum
 
-        # Finding cumulative probability 
+        # Finding cumulative probability
         L_cum = {}
         L_cum[num_pairs] = 0
         L_index = {}
@@ -345,12 +345,12 @@ def dmc_delorean(G,qmod,qcon):
         		L_cum[num_pairs] = L_cum[num_pairs-1] + L_norm[u][v]
         		L_index[num_pairs] = (u,v)
 
-        # Binary search 
-       
+        # Binary search
+
         random_number = random.random()
         start_index = 0
         end_index = num_pairs
-        
+
         while start_index != end_index - 1:
         	pivot = int((start_index + end_index)/2)
         	if random_number >= L_cum[pivot] and random_number <= L_cum[pivot+1]:
@@ -396,7 +396,7 @@ def dmc_delorean(G,qmod,qcon):
             else: G.add_edge(u,neighbor)
         G.remove_node(v)
 
-        H.append((u,v)) 
+        H.append((u,v))
         print "%s\t%s" %(u,v)
 
         # Fix up altered Luv values.
@@ -414,8 +414,8 @@ def dmc_delorean(G,qmod,qcon):
 
 
 #==============================================================================
-# The tree file H from the previous function is used here to create 
-# the nre file. Dendropy to create the phylogeny Tree T from reverse 
+# The tree file H from the previous function is used here to create
+# the nre file. Dendropy to create the phylogeny Tree T from reverse
 # DMC algorithms
 #==============================================================================
 def generate_tree_dendro(H,outfile):
@@ -448,9 +448,9 @@ def generate_tree_dendro(H,outfile):
         temp_tree_nodes = [x for x in temp_tree.nodes()]
         current_parent[0].add_child(temp_tree_nodes[1])
         current_parent[0].add_child(temp_tree_nodes[2])
-        current_parent[0].taxon.label = current_parent[0].oid
+        current_parent[0].taxon.label = current_parent[0].oid  # used to be .oid here. Removing oid causes a maximum recursion depth error
 
-    #print tree 
+    #print tree
 
     out = tree.as_string('newick')
     out =  out.replace('[&U]','[50]') ## 50 unit long sequences
@@ -460,9 +460,9 @@ def generate_tree_dendro(H,outfile):
 
 
 #==============================================================================
-# Once the we have a Original graph G and measure the topological 
-# distance from it. The topolofical distance is their likelihood 
-# Make Tree from It 
+# Once the we have a Original graph G and measure the topological
+# distance from it. The topolofical distance is their likelihood
+# Make Tree from It
 #==============================================================================
 
 def measure_D_net(G,qmod,qcon):
@@ -487,21 +487,21 @@ def measure_D_net(G,qmod,qcon):
 
     names = []
     for u in G: names.append('Taxon'+str(u))
-    print names 
+    print names
     print D_net
     D_net_final = _DistanceMatrix(names,D_net)
-    #print D_net_final.names 
+    #print D_net_final.names
 
     constructor = DistanceTreeConstructor()
     tree_dmc = constructor.upgma(D_net_final)
     #print tree_dmc
     Phylo.write(tree_dmc,'ph_dmc.nre','newick')
-    
+
     return D_net_final
 
 #==============================================================================
 #                           Make D_Seq
-#    The fasta file is made from 
+#    The fasta file is made from
 #'./indel-seq-gen --matrix HKY --outfile ' + dna_out + ' < ' + outfile
 #==============================================================================
 
@@ -515,7 +515,7 @@ def D_seq_matrix(fasta_file):
     tree_seq = constructor.upgma(dm)
     #print tree_dmc
     Phylo.write(tree_seq,'ph_seq.nre','newick')
-    print dm.names 
+    print dm.names
     return dm
 
 
@@ -536,8 +536,8 @@ def D_F_matrix(D_Seq,D_net,final_tree):
         #print key1
         temp_row = []
         for j in range(0,i+1):
-            
-            
+
+
             key2 = names_Net[j]
             #print key2,
             if key1 in names_Net and key2 in names_Seq:
@@ -551,7 +551,7 @@ def D_F_matrix(D_Seq,D_net,final_tree):
         #print temp_row
         D_F.append(temp_row)
 
-    print D_F 
+    print D_F
 
     D_F_final = _DistanceMatrix(D_F_names,D_F)
 
@@ -617,14 +617,14 @@ def main():
         logging.info("Running ReverseDMC...")
         print "#ANCHOR\tNODE_REMOVED"
         dmc_delorean(G,qmod,qcon) # add the history file to store the tree structure
-        
-        # Create the tree from the graph 
+
+        # Create the tree from the graph
         generate_tree_dendro(H,'rev_dmc.nre')
         #generate_tree(H)
         # From the graph generate the distance matrix using DMC measure
         D_net = measure_D_net(G1,qmod,qcon)
-        # indel sequence generator will take 
-        # over from here and it will create 
+        # indel sequence generator will take
+        # over from here and it will create
         # a fasta file that contain the dequences
         # with Taxons made from tree in the outfile,
         dna_out = outfile.replace('.nre','') + '_DNA'
@@ -638,14 +638,14 @@ def main():
         os.rename(new_seq,new_seq.replace('seq','fasta'))
         fasta_file = new_seq.replace('seq','fasta')
         # Pass fasta file here to generate the
-        # sequence distance 
+        # sequence distance
         D_seq = D_seq_matrix(fasta_file)
-        
-        # We have two distances we can make 
-        # convex combination of those and then 
+
+        # We have two distances we can make
+        # convex combination of those and then
         # use them to generate the new distance matrix
         # Create a tree from it UPGMA model would work
-        # here ..  
+        # here ..
         final_tree = new_seq.replace('.seq','') + '_F' + '.nre'
         D_F = D_F_matrix(D_seq,D_net,final_tree)
         os.system('rm *.anc_tree *.ma *.trace *.root *.scale_tree')
@@ -659,8 +659,8 @@ def main():
         treefile = str(args[5])
         #G = Graph.rand_graph(nodes,edges,outfile)
         G = forward_dmc(nodes,edges,outfile,qmod,qcon,treefile)
-        
-        
+
+
     else:
         logging.critical("Invalid model: %s. Exiting..." %(model))
         sys.exit(1)
