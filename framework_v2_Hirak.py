@@ -442,19 +442,18 @@ def generate_tree_dendro(H,outfile):
     (u,v) = H[length]
     counter = 1
     #[999]((Taxon1:0.3,Taxon2:0.14):0.5,(Taxon3:0.34, Taxon4:0.5):0.12);
-    string_root = "(" + "Taxon" + str(u) + ":" + str(1) + "," + "Taxon" + str(v) + ":" + str(1) + ")"
-    tree = dendropy.Tree(stream=StringIO.StringIO(string_root),schema="newick")
+    string_root = "(" + "Taxon" + str(u) + ":" + str(1) + "," + "Taxon" + str(v) + ":" + str(1) + ")" + ";"
+    tree = dendropy.Tree.get(data=string_root, schema="newick")
     for i in range(length-1,-1,-1):
         (u,v) = H[i]
-        string_temp = "(" + "Taxon" + str(u) + ":" + str(1) + "," + "Taxon" + str(v) + ":" + str(1) + ")"
-        temp_tree = dendropy.Tree(stream=StringIO.StringIO(string_temp),schema="newick")
+        string_temp = "(" + "Taxon" + str(u) + ":" + str(1) + "," + "Taxon" + str(v) + ":" + str(1) + ")" + ";"
+        temp_tree = dendropy.Tree.get(data=string_temp, schema="newick")
         current_parent = filter(lambda x: x.taxon.label == "Taxon" + str(u), [y for y in tree.leaf_nodes()])
         temp_tree_nodes = [x for x in temp_tree.nodes()]
         current_parent[0].add_child(temp_tree_nodes[1])
         current_parent[0].add_child(temp_tree_nodes[2])
-        current_parent[0].taxon.label = current_parent[0].oid  # used to be .oid here. Removing oid causes a maximum recursion depth error
-        # I guess this part isn't normally run? otherwise it would have the same error when .oid was attempted to be used before
-    #print tree
+        current_parent[0].taxon.label = str(current_parent[0])  # used to be .oid here. Removing oid causes a maximum recursion depth error
+        # This part runs when you do the second step, ie, use the -m dmc flag
 
     out = tree.as_string('newick')
     out =  out.replace('[&U]','[50]') ## 50 unit long sequences
@@ -631,15 +630,18 @@ def main():
         # over from here and it will create
         # a fasta file that contain the dequences
         # with Taxons made from tree in the outfile,
-        dna_out = outfile.replace('.nre','') + '_DNA'
-        ind_seq = './indel-seq-gen --matrix HKY --outfile ' + dna_out + ' < ' + outfile
-        os.system(ind_seq)
+        dna_out = outfile.replace('.nre','') + '_DNA'  # so this step is renaming 'treefile'.nre to 'treefile'_DNA.fasta
+        # rather, this step is attempting to just change the extension, but .replace changes the file contents--not the file extension
+        #base = os.path.splitext(outfile)[0]  # these next two lines are my attempt at fixing the file-writing problem
+        #dna_out = os.rename(outfile, base + '_DNA')  # but I think the already present attempt to write the file continues further in later lines, which would make this single attempt here not work.
+        ind_seq = './indel-seq-gen --matrix HKY --outfile ' + dna_out + ' > ' + outfile  # shouldn't the arrow be '>'?
+        os.system(ind_seq)                                  # wait, so the outfile is not ph1.nre?
 
 
         new_seq = dna_out + ".seq"
 
         #fasta_file = new_seq
-        os.rename(new_seq,new_seq.replace('seq','fasta'))
+        os.rename(new_seq,new_seq.replace('seq','fasta'))  # this line is trying to add the .fasta extension
         fasta_file = new_seq.replace('seq','fasta')
         # Pass fasta file here to generate the
         # sequence distance
