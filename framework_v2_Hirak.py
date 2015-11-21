@@ -634,15 +634,22 @@ def main():
         # rather, this step is attempting to just change the extension, but .replace changes the file contents--not the file extension
         #base = os.path.splitext(outfile)[0]  # these next two lines are my attempt at fixing the file-writing problem
         #dna_out = os.rename(outfile, base + '_DNA')  # but I think the already present attempt to write the file continues further in later lines, which would make this single attempt here not work.
-        ind_seq = './indel-seq-gen --matrix HKY --outfile ' + dna_out + ' > ' + outfile  # shouldn't the arrow be '>'?
-        os.system(ind_seq)                                  # wait, so the outfile is not ph1.nre?
+        ind_seq = './indel-seq-gen --matrix HKY --outfile ' + dna_out + ' < ' + outfile  # This isn't a bash-style write arrow--the help page for indel-seq-gen says to use this when referring to the tree file.
+        os.system(ind_seq)  # shouldn't indel-seq-gen also be generating a .seq file instead of just a tree file?
 
 
-        new_seq = dna_out + ".seq"
+        new_seq = dna_out + ".seq"  # the dna_out object is just "ph1_DNA". there is no actual data in it. But rather there is a ph1_DNA file that is also generated
 
         #fasta_file = new_seq
-        os.rename(new_seq,new_seq.replace('seq','fasta'))  # this line is trying to add the .fasta extension
-        fasta_file = new_seq.replace('seq','fasta')
+        #os.rename(new_seq,new_seq.replace('seq','fasta'))  # this line is trying to add the .fasta extension
+        fasta_file = new_seq.replace('seq','fasta')        # os.rename should be making ph1_DNA.fasta
+        # Need to actually create the fasta file for D_seq_matrix to read it. Right now it's just a string.
+        # Ok, so we have a problem in that a fasta file is trying to be made using the tree file used in indel-seq-gen
+        # Need to figure out how to get the sequences from this. Maybe it's the output from ind_seq?
+        # Potentially we just assign the output from it and try writing that to a fasta file?
+        print "fasta file:"
+        print fasta_file    # this just returns "ph1_DNA.fasta", so there currently is no actual sequence to write to a fasta file
+
         # Pass fasta file here to generate the
         # sequence distance
         D_seq = D_seq_matrix(fasta_file)
