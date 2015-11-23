@@ -1,4 +1,5 @@
 import dendropy
+from dendropy.calculate import treecompare
 
 T_H = dendropy.Tree.get(file=open("ph1.nre", "r"), schema="newick")
 T_DMC = dendropy.Tree.get(file=open("ph_dmc.nre", "r"), schema="newick")
@@ -6,7 +7,7 @@ T_seq = dendropy.Tree.get(file=open("ph_seq.nre", "r"), schema="newick")
 T_F = dendropy.Tree.get(file=open("ph1_DNA_F.nre", "r"), schema="newick")
 
 
-print "Distance between T_H with T_DMC " + str(T_H.robinson_foulds_distance(T_DMC))
+print "Distance between T_H with T_DMC " + str(treecompare.weighted_robinson_foulds_distance(T_H, T_DMC))#T_H.robinson_foulds_distance(T_DMC))
 print "Distance between T_H with T_seq " + str(T_H.robinson_foulds_distance(T_seq))
 print "Distance between T_H with T_F " + str(T_H.robinson_foulds_distance(T_F))
 
