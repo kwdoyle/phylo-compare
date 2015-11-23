@@ -222,10 +222,14 @@ def forward_dmc(nodes,edges,outfile,qmod,qcon,treefile):
         temp_tree_nodes = [x for x in temp_tree.nodes()]
         current_parent[0].add_child(temp_tree_nodes[1])
         current_parent[0].add_child(temp_tree_nodes[2])
-        current_parent[0].taxon.label = str(current_parent[0]) #.oid  # used to be .oid at the end of current_parent[0]. Removing oid causes a maximum recursion depth error
+        current_parent[0].taxon.label = (current_parent[0]) #.oid  # used to be .oid at the end of current_parent[0]. Removing oid causes a maximum recursion depth error
         # I think we need the pygit2 module to use .oid, which is a git attribute
         # but this actually makes sense considering git uses a tree structure to handle all
         # commits and such
+
+        # maybe the function id() can be used instead of .oid
+        # nope, that didn't fix the namespace error.
+        # not having id() or .oid there doesn't give a max recursion overflow error anymore, but it still doesn't fix the namespace error.
 
         # attemping to fix the .oid identifier deal by just assigning each label as the current_parent in string form
 
@@ -452,7 +456,7 @@ def generate_tree_dendro(H,outfile):
         temp_tree_nodes = [x for x in temp_tree.nodes()]
         current_parent[0].add_child(temp_tree_nodes[1])
         current_parent[0].add_child(temp_tree_nodes[2])
-        current_parent[0].taxon.label = str(current_parent[0])  # used to be .oid here. Removing oid causes a maximum recursion depth error
+        current_parent[0].taxon.label = (current_parent[0])  # used to be .oid here. Removing oid causes a maximum recursion depth error
         # This part runs when you do the second step, ie, use the -m dmc flag
 
     out = tree.as_string('newick')
