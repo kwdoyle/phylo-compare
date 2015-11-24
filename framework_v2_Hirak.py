@@ -194,9 +194,13 @@ def forward_dmc(nodes,edges,outfile,qmod,qcon,treefile):
             G.add_node(v)
             new_nodes.remove(v)
         if u != v:
-            if random.random() < qcon:
+            if random.random() < qcon:  # this isn't actually adding the distances from each node, which I think is what qcon and qmod should essentially be...
                 G.add_edge(u,v)
                 # Create newick tree
+                # tree set-up should be like:
+                # ((Taxon[number] : [distance from node], other Taxon[number] : [distance from node])
+                # [useless number?] : [distance of this clade from node],
+                # repeat for other taxons);
                 string_root = "(" + "Taxon" + str(u) + ":" + str(1) + "," + "Taxon" + str(v) + ":" + str(1) + ")" + ";"
                 tree = dendropy.Tree.get(data=string_root,schema="newick")
             break
