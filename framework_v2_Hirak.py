@@ -201,6 +201,9 @@ def forward_dmc(nodes,edges,outfile,qmod,qcon,treefile):
                 # ((Taxon[number] : [distance from node], other Taxon[number] : [distance from node])
                 # [useless number?] : [distance of this clade from node],
                 # repeat for other taxons);
+
+                # yes, that useless long string of numbers that gets added to the tree file is messing it up
+                # indel-seq-gen is able to read the tree file if that sequence of numbers isn't there
                 string_root = "(" + "Taxon" + str(u) + ":" + str(1) + "," + "Taxon" + str(v) + ":" + str(1) + ")" + ";"
                 tree = dendropy.Tree.get(data=string_root,schema="newick")
             break
