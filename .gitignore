@@ -3,3 +3,7 @@
 *.net
 *.fasta
 ph1_DNA
+!ph6.nre
+!ph_dmc.nre
+!ph_seq.nre
+!ph6_DNA_F.nre
