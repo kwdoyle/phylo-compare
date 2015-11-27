@@ -192,7 +192,7 @@ def forward_dmc(nodes,edges,outfile,qmod,qcon,treefile):
             new_nodes.remove(u)
         if not G.has_node(v):
             G.add_node(v)
-            new_nodes.remove(v)
+            new_nodes.remove(v)  # is this causing the KeyError when 7 nodes is attempted? I always get KeyError: 3, so maybe somehow node 3 is removed, and then is checked for again but now isn't there?
         if u != v:
             if random.random() < qcon:  # this isn't actually adding the distances from each node, which I think is what qcon and qmod should essentially be...
                 G.add_edge(u,v)

@@ -2,10 +2,10 @@ import dendropy
 from dendropy.calculate import treecompare
 
 # Using tree with largest possible amount of nodes (6)
-T_H = dendropy.Tree.get(file=open("ph6.nre", "r"), schema="newick")
+T_H = dendropy.Tree.get(file=open("ph50.nre", "r"), schema="newick")
 T_DMC = dendropy.Tree.get(file=open("ph_dmc.nre", "r"), schema="newick")
 T_seq = dendropy.Tree.get(file=open("ph_seq.nre", "r"), schema="newick")
-T_F = dendropy.Tree.get(file=open("ph6_DNA_F.nre", "r"), schema="newick")
+T_F = dendropy.Tree.get(file=open("ph50_DNA_F.nre", "r"), schema="newick")
 
 # Turn tree files into strings
 T_H_string = str(T_H) + ";"
