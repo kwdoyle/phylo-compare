@@ -59,3 +59,6 @@ print "Robinson-Foulds distance between T_H and T_F: " + str(treecompare.weighte
 print "Robinson-Foulds distance between T_DMC and T_seq: " + str(treecompare.weighted_robinson_foulds_distance(T_DMC_list[0], T_seq_list[0]))
 print "Robinson-Foulds distance between T_DMC and T_F: " + str(treecompare.weighted_robinson_foulds_distance(T_DMC_list[0], T_F_list[0]))
 print "Robinson-Foulds distance between T_seq and T_F: " + str(treecompare.weighted_robinson_foulds_distance(T_seq_list[0], T_F_list[0]))
+
+### Note: running the framework twice for the same nodes, edges, qmod, etc, will give the same exact trees each time
+# Maybe we can try changing qmod and qcon? Does it even matter?
