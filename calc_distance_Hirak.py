@@ -1,11 +1,21 @@
+import sys
 import dendropy
 from dendropy.calculate import treecompare
 
 # Using tree with largest possible amount of nodes (6)
-T_H = dendropy.Tree.get(file=open("ph50.nre", "r"), schema="newick")
-T_DMC = dendropy.Tree.get(file=open("ph_dmc.nre", "r"), schema="newick")
-T_seq = dendropy.Tree.get(file=open("ph_seq.nre", "r"), schema="newick")
-T_F = dendropy.Tree.get(file=open("ph50_DNA_F.nre", "r"), schema="newick")
+try:
+    ph_tree = sys.argv[1]
+    dmc_tree = sys.argv[2]
+    seq_tree = sys.argv[3]
+    combo_tree = sys.argv[4]
+except:
+    print "Usage: python calc_distance.py phX.nre ph_dmc.nre ph_seq.nre phX_DNA_F.nre"
+    exit()
+
+T_H = dendropy.Tree.get(file=open(ph_tree, "r"), schema="newick") # "ph50.nre"
+T_DMC = dendropy.Tree.get(file=open(dmc_tree, "r"), schema="newick") # "ph_dmc.nre"
+T_seq = dendropy.Tree.get(file=open(seq_tree, "r"), schema="newick") # "ph_seq.nre"
+T_F = dendropy.Tree.get(file=open(combo_tree, "r"), schema="newick") # "ph50_DNA_F.nre"
 
 # Turn tree files into strings
 T_H_string = str(T_H) + ";"
