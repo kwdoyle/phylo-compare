@@ -47,10 +47,15 @@ T_F_list.read(data=T_F_string, schema="newick")
 print "Symmetric difference between T_H and T_DMC: " + str(treecompare.symmetric_difference(T_H_list[0], T_DMC_list[0]))
 print "Symmetric difference between T_H and T_seq: " + str(treecompare.symmetric_difference(T_H_list[0], T_seq_list[0]))
 print "Symmetric difference between T_H with T_F: " + str(treecompare.symmetric_difference(T_H_list[0], T_F_list[0]))
-
+print "Symmetric difference between T_DMC with T_seq: " + str(treecompare.symmetric_difference(T_DMC_list[0], T_seq_list[0]))
+print "Symmetric difference between T_DMC with T_F: " + str(treecompare.symmetric_difference(T_DMC_list[0], T_F_list[0]))
+print "Symmetric difference between T_seq with T_F: " + str(treecompare.symmetric_difference(T_seq_list[0], T_F_list[0]))
 
 # Calculating the robinson foulds distances
 # this is the weighted symmetric difference, which is the sum of the square of differences in branch lengths for equivalent splits between two trees
 print "Robinson-Foulds distance between T_H and T_DMC: " + str(treecompare.weighted_robinson_foulds_distance(T_H_list[0], T_DMC_list[0]))
 print "Robinson-Foulds distance between T_H and T_seq: " + str(treecompare.weighted_robinson_foulds_distance(T_H_list[0], T_seq_list[0]))
 print "Robinson-Foulds distance between T_H and T_F: " + str(treecompare.weighted_robinson_foulds_distance(T_H_list[0], T_F_list[0]))
+print "Robinson-Foulds distance between T_DMC and T_seq: " + str(treecompare.weighted_robinson_foulds_distance(T_DMC_list[0], T_seq_list[0]))
+print "Robinson-Foulds distance between T_DMC and T_F: " + str(treecompare.weighted_robinson_foulds_distance(T_DMC_list[0], T_F_list[0]))
+print "Robinson-Foulds distance between T_seq and T_F: " + str(treecompare.weighted_robinson_foulds_distance(T_seq_list[0], T_F_list[0]))
