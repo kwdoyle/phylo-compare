@@ -2,7 +2,7 @@ import sys
 import dendropy
 from dendropy.calculate import treecompare
 
-# Using tree with largest possible amount of nodes (6)
+# Use files to analyze as command line arguments
 try:
     ph_tree = sys.argv[1]
     dmc_tree = sys.argv[2]
