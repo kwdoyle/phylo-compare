@@ -540,7 +540,7 @@ def D_seq_matrix(fasta_file):
 #                Make D_F =  \alpha D_Seq + (1 - \alpha) D_Seq
 #==============================================================================
 
-
+# If we wanted to change "how much" of each distance matrix is used in the final combo tree, I think it would be here.
 def D_F_matrix(D_Seq,D_net,final_tree):
 
     names_Seq = D_Seq.names
