@@ -45,7 +45,7 @@ mat <- matrix(c(labels, labels), ncol=2)
 
 # True tree(?) with sequence tree
 # looks as if the sequence tree gives the same relationships as in the true relationship tree
-cophyloplot(T_H_10, T_seq_10, assoc=mat, length.line = 4, space = 48, gap = 3)
+cophyloplot(T_H_10, T_seq_10, assoc=mat, length.line = 4, space = 48, gap = 3, rotate=T)
 
 # True tree(?) with DMC tree
 cophyloplot(T_H_10, T_DMC_10, assoc=mat, length.line = 4, space = 48, gap = 3)
@@ -60,9 +60,10 @@ cophyloplot(T_DMC_10, T_seq_10, assoc=mat, length.line = 4, space = 48, gap = 3)
 cophyloplot(T_DMC_10, T_F_10, assoc=mat, length.line = 4, space = 48, gap = 3)
 
 # sequence tree with (sequence + DMC) tree
-cophyloplot(T_seq_10, T_F_10, assoc=mat, length.line = 4, space = 48, gap = 3)
+cophyloplot(T_seq_10, T_F_10, assoc=mat, length.line = 4, space = 48, gap = 3, rotate=T)
 
-
+# Rotating these trees reveals that they all have the same relationships..
+# the branch lengths are different between trees though.. I guess that's what's important?
 
 
 # calculates symmetric difference; same as in calc_distance.py
