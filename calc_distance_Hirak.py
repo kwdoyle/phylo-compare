@@ -42,8 +42,9 @@ T_F_list.read(data=T_F_string, schema="newick")
 #print T_H_list[0]
 #print T_DMC_list[0]
 
-# Calculating symmetric differences
-# symmetric difference is the number of splits found in one of the trees but not the other
+# Calculating symmetric differences (unweighted robinson foulds).
+# symmetric difference is the number of splits found in one of the trees but not the other.
+# it is defined as the number of transformations needed to turn one tree into the other.
 print "Symmetric difference between T_H and T_DMC: " + str(treecompare.symmetric_difference(T_H_list[0], T_DMC_list[0]))
 print "Symmetric difference between T_H and T_seq: " + str(treecompare.symmetric_difference(T_H_list[0], T_seq_list[0]))
 print "Symmetric difference between T_H with T_F: " + str(treecompare.symmetric_difference(T_H_list[0], T_F_list[0]))
@@ -52,7 +53,9 @@ print "Symmetric difference between T_DMC with T_F: " + str(treecompare.symmetri
 print "Symmetric difference between T_seq with T_F: " + str(treecompare.symmetric_difference(T_seq_list[0], T_F_list[0]))
 
 # Calculating the robinson foulds distances
-# this is the weighted symmetric difference, which is the sum of the square of differences in branch lengths for equivalent splits between two trees
+# This is the weighted symmetric difference, which is the sum of the square of differences in branch lengths for equivalent splits between two trees.
+# It takes edge lengths into account, and therefore will yield a non-zero answer for trees with identical relationships, but have different branch lengths.
+# This explains why the unweighted distance between T_H and T_seq is 0, but is >0 for the weighted distance.
 print "Robinson-Foulds distance between T_H and T_DMC: " + str(treecompare.weighted_robinson_foulds_distance(T_H_list[0], T_DMC_list[0]))
 print "Robinson-Foulds distance between T_H and T_seq: " + str(treecompare.weighted_robinson_foulds_distance(T_H_list[0], T_seq_list[0]))
 print "Robinson-Foulds distance between T_H and T_F: " + str(treecompare.weighted_robinson_foulds_distance(T_H_list[0], T_F_list[0]))
