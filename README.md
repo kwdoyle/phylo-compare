@@ -19,13 +19,11 @@ an evolution tree with the qcon and qmod as parameter.
 Before running the frame work, the object IDs need to be removed
 from the original tree file using the following command
 
->./removeOID.sh \<tree file\>
+>./removeOID.sh \<tree file\> \<first two numbers in object ID\>
 
-This will create a new tree file, labeled with "rm\_oid.nre"
-This file can then be renamed to the original file extension manually.
+Example:
 
-The first two numbers of the object ID in removeOID.sh need to be changed
-to match the object IDs in the tree file in question.
+>./removeOID.sh ph1.nre 45
 
 To run the frame work we need to give following command 
 
