@@ -38,6 +38,7 @@ plot(T_H_10, main="True Tree?")
 plot(T_DMC_10, main="DMC Tree")
 plot(T_seq_10, main="Seq Tree")
 plot(T_F_10, main="(DMC + Seq) Tree")
+nodelabels()
 
 # make matrix of labels to be used in cophyloplot
 #mat <- matrix(data=c(labels, labels), ncol=2)
@@ -69,3 +70,11 @@ cophyloplot(T_seq_10, T_F_10, assoc=mat, length.line = 4, space = 48, gap = 3, r
 # calculates symmetric difference; same as in calc_distance.py
 dist.topo(T_H_10, T_DMC_10)
 dist.topo(T_DMC_10, T_seq_10)
+
+
+
+# These are the branch lengths
+T_H_10$edge.length
+T_DMC_10$edge.length
+T_seq_10$edge.length
+T_F_10$edge.length
