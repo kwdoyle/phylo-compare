@@ -27,18 +27,22 @@ T_DMC_10 <- read.tree("ph10_dmc.nre")
 T_seq_10 <- read.tree("ph10_seq.nre")
 T_F_10 <- read.tree("ph10_DNA_F.nre")
 
+T_F_10_diff_qmod_and_qcon <- read.tree("ph10_2.1_DNA_F.nre")
+
 # change taxon names to just be numbers on the trees
 T_H_10$tip.label <- sub("Taxon", "", T_H_10$tip.label, fixed = T)
 T_DMC_10$tip.label <- sub("Taxon", "", T_DMC_10$tip.label, fixed = T)
 T_seq_10$tip.label <- sub("Taxon", "", T_seq_10$tip.label, fixed = T)
 T_F_10$tip.label <- sub("Taxon", "", T_F_10$tip.label, fixed = T)
+T_F_10_diff_qmod_and_qcon$tip.label <- sub("Taxon", "", T_F_10$tip.label, fixed = T)
 
 # plot
 plot(T_H_10, main="True Tree?")
 plot(T_DMC_10, main="DMC Tree")
 plot(T_seq_10, main="Seq Tree")
 plot(T_F_10, main="(DMC + Seq) Tree")
-nodelabels()
+#nodelabels()  # this will put labels on the nodes of the tree. they're kind of big and useless though
+plot(T_F_10_diff_qmod_and_qcon, main="(DMC + Seq) Tree: qmod=0.9, qcon=0.1")
 
 # make matrix of labels to be used in cophyloplot
 #mat <- matrix(data=c(labels, labels), ncol=2)
@@ -65,6 +69,9 @@ cophyloplot(T_seq_10, T_F_10, assoc=mat, length.line = 4, space = 48, gap = 3, r
 
 # Rotating these trees reveals that they all have the same relationships..
 # the branch lengths are different between trees though.. I guess that's what's important?
+
+# sequence tree with (sequence + DMC) tree which used qmod=0.9 and qcon=0.1
+cophyloplot(T_seq_10, T_F_10_diff_qmod_and_qcon, assoc=mat, length.line = 4, space = 48, gap = 3, rotate=T)
 
 
 # calculates symmetric difference; same as in calc_distance.py
