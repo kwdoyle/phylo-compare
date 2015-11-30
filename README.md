@@ -16,6 +16,16 @@ That would generate a g2.net a random graph of 50 nodes
 and 1000 edges and run the forward dmc algorithm and make 
 an evolution tree with the qcon and qmod as parameter. 
 
+Before running the frame work, the object IDs need to be removed
+from the original tree file using the following command
+
+>./removeOID.sh \<tree file\>
+
+This will create a new tree file, labeled with "rm\_oid.nre"
+This file can then be renamed to the original file extension manually.
+
+The first two numbers of the object ID in removeOID.sh need to be changed
+to match the object IDs in the tree file in question.
 
 To run the frame work we need to give following command 
 
