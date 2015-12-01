@@ -10,10 +10,10 @@ generated, using the following command
 
 Example: 
 
->python framework\_v2.py -m gen 50 1000  g1.net 0.4 0.7 ph1.nre
+>python framework\_v2.py -m gen 10 200  g1.net 0.4 0.7 ph1.nre
 
-That would generate a g2.net a random graph of 50 nodes
-and 1000 edges and run the forward dmc algorithm and make 
+That would generate a g2.net a random graph of 10 nodes
+and 200 edges and run the forward dmc algorithm and make 
 an evolution tree with the qcon and qmod as parameter. 
 
 Before running the frame work, the object IDs need to be removed
