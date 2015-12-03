@@ -37,12 +37,12 @@ T_F_10$tip.label <- sub("Taxon", "", T_F_10$tip.label, fixed = T)
 T_F_10_diff_qmod_and_qcon$tip.label <- sub("Taxon", "", T_F_10$tip.label, fixed = T)
 
 # plot
-plot(T_H_10, main="True Tree?")
+plot(T_H_10, main="True Tree")
 plot(T_DMC_10, main="DMC Tree")
 plot(T_seq_10, main="Seq Tree")
 plot(T_F_10, main="(DMC + Seq) Tree")
 #nodelabels()  # this will put labels on the nodes of the tree. they're kind of big and useless though
-plot(T_F_10_diff_qmod_and_qcon, main="(DMC + Seq) Tree: qmod=0.9, qcon=0.1")
+plot(T_F_10_diff_qmod_and_qcon, main="(DMC + Seq) Tree", sub="qmod=0.9, qcon=0.1")
 
 # make matrix of labels to be used in cophyloplot
 #mat <- matrix(data=c(labels, labels), ncol=2)
@@ -59,7 +59,7 @@ cophyloplot(T_H_10, T_DMC_10, assoc=mat, length.line = 4, space = 48, gap = 3)
 cophyloplot(T_H_10, T_F_10, assoc=mat, length.line = 4, space = 48, gap = 3)
 
 # DMC tree with sequence tree
-cophyloplot(T_DMC_10, T_seq_10, assoc=mat, length.line = 4, space = 48, gap = 3)
+cophyloplot(T_DMC_10, T_seq_10, assoc=mat, length.line = 4, space = 48, gap = 3, rotate=T)
 
 # DMC tree with (sequence + DMC) tree
 cophyloplot(T_DMC_10, T_F_10, assoc=mat, length.line = 4, space = 48, gap = 3)
