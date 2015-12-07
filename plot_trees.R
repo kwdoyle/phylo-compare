@@ -81,7 +81,12 @@ dist.topo(T_DMC_10, T_seq_10)
 
 
 # These are the branch lengths
-T_H_10$edge.length
-T_DMC_10$edge.length
-T_seq_10$edge.length
-T_F_10$edge.length
+TH_branch <- T_H_10$edge.length
+DMC_branch <- T_DMC_10$edge.length
+seq_branch <- T_seq_10$edge.length
+combo_branch <- T_F_10$edge.length
+
+branch_lengths_mat <- matrix(c(TH_branch, DMC_branch, seq_branch, combo_branch), nrow=length(TH_branch), ncol=4, byrow=F)
+colnames(branch_lengths_mat) <- c("T_H", "T_DMC", "T_seq", "T_comb")
+branch_lengths <- data.frame(branch_lengths_mat)
+

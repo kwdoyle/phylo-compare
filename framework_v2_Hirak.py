@@ -254,8 +254,8 @@ def forward_dmc(nodes,edges,outfile,qmod,qcon,treefile):
 
         for x in adjacent_nodes:
             if random.random() < qmod:
-                if random.random() < 0.5:
-                    if G.has_edge(x,child_node):
+                if random.random() < 0.5:  # should these 0.5s be qmod and qcon instead?
+                    if G.has_edge(x,child_node):  # or maybe not, because this is for the forward dmc step.
                         G.delete_edge(x,child_node)
                 elif (G.has_edge(x,new_parent)):
                         G.delete_edge(x,new_parent)
@@ -562,9 +562,9 @@ def D_F_matrix(D_Seq,D_net,final_tree):
                     D_F_names.append(key1)
                 i1 = names_Net.index(key1)
                 j2 = names_Net.index(key2)
-                new_val = (0.5*D_net[key1,key2] + 0.5*D_Seq[key1,key2])
-                #print new_val,
-                temp_row.append(new_val)
+                new_val = (0.5*D_net[key1,key2] + 0.5*D_Seq[key1,key2])  # alpha is set to 0.5
+                #print new_val,                                          # we can change alpha to choose how much of D_Seq and D_net we want to use
+                temp_row.append(new_val)                                 # although shouldn't the formula in new_val be the same as what's on line 540?
         #print temp_row
         D_F.append(temp_row)
 
