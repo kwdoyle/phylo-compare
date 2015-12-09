@@ -29,12 +29,20 @@ T_F_10 <- read.tree("ph10_DNA_F.nre")
 
 T_F_10_diff_qmod_and_qcon <- read.tree("ph10_2.1_DNA_F.nre")
 
+# 10 nodes, alpha = 1
+T_H_alpha1 <- read.tree("alpha-1.nre")
+T_F_alpha1 <- read.tree("alpha-1_DNA_F.nre")
+rev_dmc_alpha1 <- read.tree("rev_dmc_alpha-1.nre")
+
 # change taxon names to just be numbers on the trees
 T_H_10$tip.label <- sub("Taxon", "", T_H_10$tip.label, fixed = T)
 T_DMC_10$tip.label <- sub("Taxon", "", T_DMC_10$tip.label, fixed = T)
 T_seq_10$tip.label <- sub("Taxon", "", T_seq_10$tip.label, fixed = T)
 T_F_10$tip.label <- sub("Taxon", "", T_F_10$tip.label, fixed = T)
 T_F_10_diff_qmod_and_qcon$tip.label <- sub("Taxon", "", T_F_10$tip.label, fixed = T)
+T_H_alpha1$tip.label <- sub("Taxon", "", T_H_alpha1$tip.label, fixed = T)
+T_F_alpha1$tip.label <- sub("Taxon", "", T_F_alpha1$tip.label, fixed = T)
+rev_dmc_alpha1$tip.label <- sub("Taxon", "", rev_dmc_alpha1$tip.label, fixed = T)
 
 # plot
 plot(T_H_10, main="True Tree")
@@ -72,6 +80,18 @@ cophyloplot(T_seq_10, T_F_10, assoc=mat, length.line = 4, space = 48, gap = 3, r
 
 # sequence tree with (sequence + DMC) tree which used qmod=0.9 and qcon=0.1
 cophyloplot(T_seq_10, T_F_10_diff_qmod_and_qcon, assoc=mat, length.line = 4, space = 48, gap = 3, rotate=T)
+
+
+# true tree and combo tree with alpha = 1
+cophyloplot(T_H_alpha1, T_F_alpha1, assoc=mat, length.line = 4, space = 48, gap = 3)
+
+# true tree and rev_dmc tree w/ alpha=1?
+cophyloplot(T_H_alpha1, rev_dmc_alpha1, assoc=mat, length.line = 4, space = 48, gap = 3)
+
+
+
+
+
 
 
 # calculates symmetric difference; same as in calc_distance.py
