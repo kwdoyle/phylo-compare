@@ -541,7 +541,7 @@ def D_seq_matrix(fasta_file):
 #==============================================================================
 
 # If we wanted to change "how much" of each distance matrix is used in the final combo tree, I think it would be here.
-def D_F_matrix(D_Seq,D_net,final_tree):
+def D_F_matrix(D_Seq,D_net,final_tree, alpha):
 
     names_Seq = D_Seq.names
     names_Net = D_net.names
@@ -561,8 +561,8 @@ def D_F_matrix(D_Seq,D_net,final_tree):
                 if not key1 in D_F_names:
                     D_F_names.append(key1)
                 i1 = names_Net.index(key1)
-                j2 = names_Net.index(key2)
-                new_val = (1*D_net[key1,key2] + 1*D_Seq[key1,key2])  # alpha is set to 0.5
+                j2 = names_Net.index(key2)                              # should be 1-alpha * D_net and alpha * D_seq
+                new_val = (1-alpha*D_net[key1,key2] + alpha*D_Seq[key1,key2])  # alpha is set to 0.5
                 #print new_val,                                          # we can change alpha to choose how much of D_Seq and D_net we want to use
                 temp_row.append(new_val)                                 # although shouldn't the formula in new_val be the same as what's on line 540?
         #print temp_row
@@ -615,13 +615,14 @@ def main():
 
     # DMC
     if model == "dmc" or model == "DMC":
-        if len(args) != 4:
+        if len(args) != 5:
             logging.critical("Illegal number of parameters (%i, expected 3): <network> <qmod> <qcon>. Exiting..." %(len(args)))
             sys.exit(1)
 
         qmod = float(args[1])
         qcon = float(args[2])
         outfile = str(args[3])
+        alpha = float(args[4])
         #his = str(args[3])
 
         if qmod < 0 or qmod > 1:
@@ -668,7 +669,7 @@ def main():
         # Create a tree from it UPGMA model would work
         # here ..
         final_tree = new_seq.replace('.seq','') + '_F' + '.nre'
-        D_F = D_F_matrix(D_seq,D_net,final_tree)
+        D_F = D_F_matrix(D_seq,D_net,final_tree, alpha)
         os.system('rm *.anc_tree *.ma *.trace *.root *.scale_tree')
 
     elif model == "gen":
