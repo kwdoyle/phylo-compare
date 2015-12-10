@@ -562,7 +562,7 @@ def D_F_matrix(D_Seq,D_net,final_tree, alpha):
                     D_F_names.append(key1)
                 i1 = names_Net.index(key1)
                 j2 = names_Net.index(key2)                              # should be 1-alpha * D_net and alpha * D_seq
-                new_val = (1-alpha*D_net[key1,key2] + alpha*D_Seq[key1,key2])  # alpha is set to 0.5
+                new_val = ((1-alpha) * D_net[key1,key2]) + (alpha * D_Seq[key1,key2])  # alpha is set to 0.5
                 #print new_val,                                          # we can change alpha to choose how much of D_Seq and D_net we want to use
                 temp_row.append(new_val)                                 # although shouldn't the formula in new_val be the same as what's on line 540?
         #print temp_row
