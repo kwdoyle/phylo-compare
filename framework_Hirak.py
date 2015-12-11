@@ -567,7 +567,7 @@ def dmc_delorean(G,qmod,qcon):  # use this rev_dmc function in the _v2 code
             for v in G:
                 if u >= v: continue
 
-                Luv = L[u][v]
+                Luv = L[u][v]       # this is where it is choosing new nodes based on their probabbility
                 if Luv > L_prob:
                     L_list = [(u,v)]
                     L_prob = Luv

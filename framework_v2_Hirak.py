@@ -311,7 +311,10 @@ def forward_dmc(nodes,edges,outfile,qmod,qcon,treefile):
 # their likelihood.
 #==============================================================================
 
-def dmc_delorean(G,qmod,qcon):
+# Using this dmc function from the original framework.py script produces
+# a better reverse dmc tree. The symmetric difference between the true tree
+# and the rev_dmc tree is now 8 instead of 14.
+def dmc_delorean(G,qmod,qcon):  # use this rev_dmc function in the _v2 code
     """ Reconstructs the network using the dmc model and delorean algorithm. """
 
     # Make initial pairwise likelihoods.
@@ -325,83 +328,29 @@ def dmc_delorean(G,qmod,qcon):
         for v in G:
             if u >= v: continue
             L[u][v] = G.dmc_likelihood(u,v,qmod,qcon)
-            print L[u][v]
-        print '\n'
+
     level_counter = 0
 
-    while (G.num_nodes >= 2):
-    	# at least two nodes in the graph.
-		# Get largest Luv.
+    while (G.num_nodes >= 2): # at least two nodes in the graph.
+
+        # Get largest Luv.
         L_list = []
         L_prob = -10000000000
-
-
-        norm_sum = 0
-        num_pairs = 0
-        for u in G:
-        	for v in G:
-        		if u >= v: continue
-        		norm_sum = norm_sum + L[u][v]
-
-
-        L_norm = {}
-    	for u in G: L_norm[u] = {}
-
-    	for u in G:
-        	for v in G:
-        		if u >= v: continue
-        		L_norm[u][v] = L[u][v] / norm_sum
-
-        # Finding cumulative probability
-        L_cum = {}
-        L_cum[num_pairs] = 0
-        L_index = {}
-        for u in G:
-        	for v in G:
-        		if u >= v: continue
-        		num_pairs = num_pairs + 1
-        		L_cum[num_pairs] = L_cum[num_pairs-1] + L_norm[u][v]
-        		L_index[num_pairs] = (u,v)
-
-        # Binary search
-
-        random_number = random.random()
-        start_index = 0
-        end_index = num_pairs
-
-        while start_index != end_index - 1:
-        	pivot = int((start_index + end_index)/2)
-        	if random_number >= L_cum[pivot] and random_number <= L_cum[pivot+1]:
-        		break
-        	elif random_number < L_cum[pivot]:
-        		end_index = pivot
-        	elif random_number > L_cum[pivot]:
-        		start_index = pivot
-
-
-
-
-
-        '''
 
         for u in G:
             for v in G:
                 if u >= v: continue
 
-                Luv = L[u][v]
+                Luv = L[u][v]       # this is where it is choosing new nodes based on their probabbility
                 if Luv > L_prob:
                     L_list = [(u,v)]
                     L_prob = Luv
                 elif Luv == L_prob:
                     L_list.append((u,v))
 
-
-        '''
-        u,v = L_index[end_index]
-
         # Choose random pair; assign random daddy.
-        #pair = random.choice(L_list)
-        #(u,v) = (pair[0],pair[1]) if random.random() > 0.5 else (pair[1],pair[0])
+        pair = random.choice(L_list)
+        (u,v) = (pair[0],pair[1]) if random.random() > 0.5 else (pair[1],pair[0])
 
         # Nodes whose likelihood values need to be computed.
         altered = (G.neighbors(u) | G.neighbors(v) | set([u])) - set([v])
@@ -562,9 +511,9 @@ def D_F_matrix(D_Seq,D_net,final_tree, alpha):
                     D_F_names.append(key1)
                 i1 = names_Net.index(key1)
                 j2 = names_Net.index(key2)                              # should be 1-alpha * D_net and alpha * D_seq
-                new_val = ((1-alpha) * D_net[key1,key2]) + (alpha * D_Seq[key1,key2])  # alpha is set to 0.5
+                new_val = ((1-alpha) * D_net[key1,key2]) + (alpha * D_Seq[key1,key2])  # alpha can be set to any value (between 0 and 1)
                 #print new_val,                                          # we can change alpha to choose how much of D_Seq and D_net we want to use
-                temp_row.append(new_val)                                 # although shouldn't the formula in new_val be the same as what's on line 540?
+                temp_row.append(new_val)
         #print temp_row
         D_F.append(temp_row)
 
