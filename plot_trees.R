@@ -143,12 +143,14 @@ branch_lengths <- data.frame(branch_lengths_mat)
 
 
 
-
+library(xtable)
 # make table of symmetric & robinson-foulds distances btwn true tree & combo tree
 sym.diffs <- c("alpha = 1"=0, "alpha = 0.75"=0, "alpha = 0.5"=4, "alpha = 0.25"=4, "alpha = 0"=14)
 RF.diffs <- c("alpha = 1"=2.18, "alpha = 0.75"=3.16, "alpha = 0.5"=4.22, "alpha = 0.25"=5.37, "alpha = 0"=6.33)
 distances <- data.frame(sym.diffs, RF.diffs)
 colnames(distances) <- c("Symmetric", "Robinson-Foulds")
+
+xtable(distances)
 
 # diff btwn seq & combo tree
 sym.diff2 <- c("alpha = 0.75"=0)

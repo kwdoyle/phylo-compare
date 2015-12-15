@@ -2,6 +2,8 @@
 *.nre
 *.net
 *.fasta
+*.log
+*.gz
 ph1_DNA
 !ph6.nre
 !ph_dmc.nre
